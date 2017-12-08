@@ -2,17 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title> Интервальный таймер </title>
     <link rel="stylesheet" href="css/bootstrap.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <script src="js/bootstrap.min.js" type="text/javascript"></script>
-
-
+    <link href="main.css" rel="stylesheet">
 </head>
 <body>
-
 
 <audio id="myAudio">
     <source src="gong.ogg" type="audio/ogg">
@@ -21,277 +18,11 @@
 </audio>
 
 
-
-<style>
-
-
-    html { 
-        height: 100%;
-    }
-
-    body {
-        margin: 0;
-        height: 100%;
-        background: url(fon.jpg);
-        background-size: cover;
-        font-size: 25pt;
-        line-height: 2;
-        text-align:  center;
-        display: flex;
-        justify-content: center;
-
-    }
-
-
-    .timer {
-        padding: 2%;
-        opacity: 0.85;
-        background: white;
-        width: 70%;
-
-       margin: auto;
-
-       overflow: auto;
-
-    }
-
-    .green {
-        display: inline-block;
-        color: white;
-        font-weight: 700;
-        text-decoration: none;
-        user-select: none;
-        padding: .5em 2em;
-        outline: none;
-        border: 2px solid;
-        border-radius: 1px;
-        transition: 0.2s;
-        background: green;
-    }
-
-    .green:hover {
-        background: blue;
-    }
-
-    .green:active {
-        background: deepskyblue;
-    }
-
-    .red {
-        display: inline-block;
-        color: white;
-        font-weight: 700;
-        text-decoration: none;
-        user-select: none;
-        padding: .5em 2em;
-        outline: none;
-        border: 2px solid;
-        border-radius: 1px;
-        transition: 0.2s;
-        background: red;
-        margin-bottom: 5%;
-
-    }
-
-    .red:hover {
-        background: blue;
-    }
-
-    .red:active {
-        background: deepskyblue;
-    }
-
-    input{
-        width: auto;
-        padding: 2%;
-        margin: 1%;
-        line-height: initial;
-
-    }
-
-
-</style>
-
-
-<script type="text/javascript">
-    var x = document.getElementById("myAudio");
-    function sound() {
-
-        x.play();
-        if ('vibrate' in navigator) {
-            navigator.vibrate([1000, 500, 1000, 500, 2000]);
-        }
-
-
-    }
-
-
-    function stop() {
-
-        clearTimeout(myTimer);
-
-
-        document.getElementById('number').innerHTML = "Количество раундов:  <select  name=n id=n> <option value=1>1</option>                <option value=2>2</option>                <option selected value=3>3</option>                <option value=4>4</option>                <option value=5>5</option>                <option value=6>6</option>                <option value=7>7</option>                <option value=8>8</option>                <option value=9>9</option>                <option value=10>10</option>                <option value=11>11</option>                <option value=12>12</option>                </select> <br>";
-
-
-        document.getElementById('round').innerHTML =
-                "Время раунда: <INPUT TYPE=time NAME=r id=r   value=03:00 min=00:00 max=59:59>  <br>";
-
-        document.getElementById('relax').innerHTML =
-                "Время отдыха: <INPUT TYPE=time NAME=rel id=rel  value=01:00 min=00:00 max=59:59 <br>";
-
-        document.getElementById('button').innerHTML
-                = " <input type=button value=Start class=green   onclick=start();>          <input type=button value=Stop  class=red onclick=stop()>         ";
-
-
-    }
-
-
-    function pause() {
-        document.getElementById('button').innerHTML
-                = " <input type=button value=Start class=green   onclick=play();>            <input type=button value=Stop class=red onclick=stop()>        ";
-        clearTimeout(myTimer);
-    }
-
-
-    function start() {
-
-
-        boi = document.getElementById('r').value;
-
-        rel = document.getElementById('rel').value;
-        i = n = document.getElementById('n').value;
-        document.getElementById('number').innerHTML = n - i + 1 + " раунд из " + n;
-        document.getElementById('relax').innerHTML = "Бой!";
-
-
-        document.getElementById('round').innerHTML = boi;
-
-
-        play();
-
-    }
-
-    function play() {
-
-        document.getElementById('button').innerHTML
-                = " <input type=button value=Pause class=green   onclick=pause();> <input type=button value=Stop  class=red onclick=stop()> ";
-
-        setTimeout(timer, 1000);
-
-        function timer() {
-
-            var obj = document.getElementById('round');
-
-            var hms = obj.innerHTML;   // your input string
-            var a = hms.split(':'); // split it at the colons
-
-
-            var seconds = (+a[0]) * 60 + (+a[1]);
-
-
-            seconds--;
-
-
-                    var   m,s;
-            m= ~~(seconds / 60);
-            if (m<10) m='0'+m;
-            s= (seconds % 60);
-            if (s<10) s='0'+s;
-
-
-            obj.innerHTML = m + ":" + s;
-            if (i > 1) {
-
-                if (seconds == 0) {
-
-                    sound();
-                    relax();
-                    document.getElementById('round').innerHTML = rel;
-                    document.getElementById('relax').innerHTML = "Отдых!";
-
-                    i--;
-
-                    //   document.getElementById('status').innerHTML = "Бой!";
-
-
-                }
-                else {
-                    myTimer = setTimeout(timer, 1000);
-
-                }
-
-            }
-            else{
-
-
-                if (seconds == 0) {
-
-                    sound();
-                    document.getElementById('relax').innerHTML = "Бой завершен!";
-                    stop();
-                    i--;
-
-
-
-                }
-                else {
-                    myTimer = setTimeout(timer, 1000);
-
-                }
-
-            }
-
-
-        }
-
-        function relax() {
-            var obj = document.getElementById('round');
-
-
-            var hms = obj.innerHTML;   // your input string
-            var a = hms.split(':'); // split it at the colons
-
-
-            var seconds = (+a[0]) * 60 + (+a[1]);
-            seconds--;
-            // obj.innerHTML--;
-                             var   m,s;
-            m= ~~(seconds / 60);
-            if (m<10) m='0'+m;
-            s= (seconds % 60);
-            if (s<10) s='0'+s;
-
-
-            obj.innerHTML = m + ":" + s;
-
-            if (seconds == 0) {
-                sound();
-                document.getElementById('round').innerHTML = boi;
-                document.getElementById('relax').innerHTML = "Бой!";
-                document.getElementById('number').innerHTML = n - i + 1 + " раунд из " + n;
-
-                setTimeout(timer, 1000);
-            }
-
-            else {
-                myTimer = setTimeout(relax, 1000);
-
-
-            }
-
-
-        }
-    }
-
-
-</script>
-
 <div class="timer">
 
     <div id="number">
         Количество раундов:
-        <select name="n" id="n">
+        <select name="countRound" id="countRound">
             <option value="1">1</option>
             <option value="2">2</option>
             <option selected value="3">3</option>
@@ -311,14 +42,14 @@
 
     <div id="round">
         Время раунда:
-        <INPUT TYPE="time" NAME="r" id='r' value="03:00" min="00:00" max="59:59"> <br>
+        <INPUT TYPE="time" NAME="roundInput" id='roundInput' value="03:00" min="00:00" max="59:59"> <br>
 
     </div>
 
 
     <div id="relax">
         Время отдыха:
-        <INPUT TYPE="time" NAME="rel" id='rel' value="01:00" min="00:00" max="59:59"> <br>
+        <INPUT TYPE="time" NAME="relaxInput" id='relaxInput' value="01:00" min="00:00" max="59:59"> <br>
 
     </div>
 
@@ -330,10 +61,11 @@
         <input type=button value=Stop class=red onclick=stop()>
     </div>
 
-
     </p>
 
 </div>
+
+<script src="index.js" type="text/javascript"> </script>
 
 
 </body>
